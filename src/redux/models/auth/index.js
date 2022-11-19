@@ -3,6 +3,7 @@ import clientUtils from '@utils/client-utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {useNavigation} from '@react-navigation/native';
+import {_navigator} from '../../..';
 // import {toast} from 'react-toastify';
 
 /* eslint import/no-anonymous-default-export: [2, {"allowObject": true}] */
@@ -10,39 +11,7 @@ import {useNavigation} from '@react-navigation/native';
 // const dataInit = initStore();
 export default {
   state: {
-    auth: (async () => {
-      try {
-        const res = await AsyncStorage.getItem('auth');
-        console.log(res, 'console.log(AsyncStorage.getItem());');
-        const auth = JSON.parse(res) || {};
-        if (auth?.userId) {
-          return auth;
-        }
-
-        // let data = AsyncStorage.getItem('auth') || '';
-
-        // console.log(data._W, 'data');
-
-        return {
-          userId: 1,
-          avatar:
-            'https://scontent.fhan3-5.fna.fbcdn.net/v/t39.30808-6/277585198_1576678479399787_4155074655708359256_n.jpg?_nc_cat=109&ccb=1-6&_nc_sid=09cbfe&_nc_ohc=xUpBowVSwtQAX9CLEoM&tn=PBmWd8efRebvWDfN&_nc_ht=scontent.fhan3-5.fna&oh=00_AT_tJDVixW7mJfn5aMpLST4SAWt1LTwcKpBckKdcZ4hhSQ&oe=627C9B32',
-        };
-        // if (data) {
-        //   const parseData = JSON.parse(data);
-        //   clientUtils.auth = 'Bearer ' + parseData.token;
-        //   clientUtils.token = parseData.token;
-        //   return parseData;
-        // }
-      } catch (error) {
-        console.log(error);
-      }
-      return {
-        userId: 1,
-        avatar:
-          'https://scontent.fhan3-5.fna.fbcdn.net/v/t39.30808-6/277585198_1576678479399787_4155074655708359256_n.jpg?_nc_cat=109&ccb=1-6&_nc_sid=09cbfe&_nc_ohc=xUpBowVSwtQAX9CLEoM&tn=PBmWd8efRebvWDfN&_nc_ht=scontent.fhan3-5.fna&oh=00_AT_tJDVixW7mJfn5aMpLST4SAWt1LTwcKpBckKdcZ4hhSQ&oe=627C9B32',
-      };
-    })(),
+    auth: {},
   },
   reducers: {
     updateData(state, payload = {}) {
@@ -50,18 +19,33 @@ export default {
     },
   },
   effects: dispatch => ({
+    initApp: () => {
+      AsyncStorage.getItem('auth').then(res => {
+        const auth = JSON.parse(res) || {};
+        console.log(auth, 'console.log(AsyncStorage.getItem());');
+        if (!!auth?.userId) {
+          dispatch.auth.updateData({
+            auth,
+          });
+          clientUtils.auth = auth.token;
+        }
+      });
+    },
+    onLogout: () => {
+      dispatch.auth.updateData({auth: null});
+      AsyncStorage.clear().then(() => {
+        _navigator.reset({
+          index: 1,
+          routes: [{name: 'Login'}],
+        });
+      });
+    },
     onLogin: (payload, {}) => {
       // if (!info?.ip) return;
       return new Promise((resolve, reject) => {
         authProvider
           .login({
             ...payload,
-            deviceInfo: {
-              ip: 'ip',
-              nameDevice: 'SAMSUNG A32',
-              address: 'ko có',
-              application: 'CHAT APP',
-            },
           })
           .then(res => {
             if (res && res.code === 0) {
@@ -69,6 +53,7 @@ export default {
 
               // toast.success('Đăng nhập thành công');
               dispatch.auth.updateData({auth: res.data});
+              clientUtils.auth = res.data?.token;
               // setTimeout(() => {
               //   window.location.reload();
               // }, 5000);

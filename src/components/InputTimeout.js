@@ -14,6 +14,7 @@ const InputTimeout = (
     onChangeText = () => {},
     style = {},
     placeholder = '',
+    ...rest
   },
   ref,
 ) => {
@@ -58,7 +59,8 @@ const InputTimeout = (
       onChangeText={handleChange}
       value={data}
       style={style}
-      placeholder={placeholder}></TextInput>
+      placeholder={placeholder}
+      {...rest}></TextInput>
   );
 };
 

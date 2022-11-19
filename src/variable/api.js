@@ -10,4 +10,8 @@ export const API = {
   deviceInfo: '/device-info',
   postEmoji: '/post-emoji',
   postComment: '/post-comment',
+  course: '/course',
+  comment: '/comment',
+  chapter: '/chapter',
+  register: '/register',
 };

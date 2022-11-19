@@ -2,19 +2,14 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {Image, View} from 'react-native';
 import MyText from '../../components/MyText';
-import {COLORS, constants, images, SIZES} from '../../../constants';
+import {COLORS, constants, images, SIZES} from '../../constants';
 import MyButton from '../../components/MyButton';
 import {withNavigation} from '@react-navigation/compat';
+import {Routes} from '../../utils/strings';
 
 const Explore = ({navigation}) => {
-  const [state, _setState] = useState({current: 0});
-
   const onClickNext = () => {
-    if (state.current === 4) {
-      navigation.push('Home');
-    } else {
-      _setState({current: state.current + 1});
-    }
+    navigation.push(Routes.MainTab);
   };
 
   return (
@@ -54,13 +49,13 @@ const Explore = ({navigation}) => {
         }}></Image>
       <View
         style={{
-          //   borderWidth: 1,
+          marginHorizontal: -30,
           height: 80,
           display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
+          // flexDirection: 'row',
+          alignItems: 'flex-end',
         }}>
-        {[1, 2, 3, 4, 5].map((item, index) => (
+        {/* {[1, 2, 3, 4, 5].map((item, index) => (
           <View
             key={index}
             style={{
@@ -71,11 +66,12 @@ const Explore = ({navigation}) => {
               marginLeft: 15,
               borderRadius: 5,
             }}></View>
-        ))}
+        ))} */}
         <MyButton
           style={{
-            right: -130,
-            position: 'absolute',
+            right: -60,
+            padding: 24,
+            // position: 'absolute',
             width: 200,
             color: 'white',
             justifyContent: 'flex-start',

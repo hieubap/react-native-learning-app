@@ -8,13 +8,16 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import InputTimeout from '../../components/InputTimeout';
-import img from '../../../constants/images';
+import img from '../../constants/images';
 import MyText from '../../components/MyText';
 import MyButton from '../../components/MyButton';
-import icon from '../../../constants/icons';
-import {COLORS} from '../../../constants';
+import icon from '../../constants/icons';
+import {COLORS} from '../../constants';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
+import authProvider from '../../data-access/auth-provider';
+import {refModal} from '../..';
 
 const screenSize = Dimensions.get('window');
 
@@ -25,6 +28,7 @@ const Login = ({
   sendMessage,
   currentRoom,
 }) => {
+  const {auth} = useSelector(state => state.auth);
   const [state, _setState] = useState({
     width: screenSize.width,
     height: screenSize.height,
@@ -36,13 +40,28 @@ const Login = ({
   };
 
   const refScroll = useRef();
-  const refInput = useRef();
+  const refInput = useRef({});
 
   const onSubmit = () => {
-    // if (!state.username || !state.password) {
-    //   return;
-    // }
-    navigation.push('Explore');
+    if (!refInput.current.username || !refInput.current.password) {
+      return;
+    }
+    onLogin(refInput.current)
+      .then(res => {
+        refModal.current &&
+          refModal.current.show({
+            type: 'success',
+            content: 'Đăng nhập thành công',
+          });
+      })
+      .catch(e => {
+        refModal.current &&
+          refModal.current.show({
+            type: 'error',
+            content: e.message || e?.toString(),
+          });
+      });
+    // navigation.push('Explore');
     // onLogin({username: state.username, password: state.password}).then(() => {
     //   navigation.push('Home');
     // });
@@ -68,20 +87,25 @@ const Login = ({
   };
 
   useEffect(() => {
+    if (auth?.userId) {
+      navigation.replace('Explore');
+    }
+  }, [auth]);
+  useEffect(() => {
     scrollBottom();
     Keyboard.addListener('keyboardDidShow', eventKeyBoard);
     Keyboard.addListener('keyboardDidHide', eventKeyBoard);
   }, []);
 
   const onChangeText = key => inputData => {
-    setState({[key]: inputData});
-  };
-  const onChangeInput = data => {
-    const emptyInput = data === '';
+    refInput.current[key] = inputData;
+
+    const emptyInput = !refInput.current.username || !refInput.current.password;
     if (state.emptyInput !== emptyInput) {
       setState({emptyInput});
     }
   };
+  const onChangeInput = data => {};
   return (
     <View
       style={{
@@ -131,9 +155,8 @@ const Login = ({
           paddingVertical: 50,
           //   borderWidth: 1,
         }}>
-        <MyText>Username or Email</MyText>
-        <InputTimeout
-          ref={refInput}
+        <MyText>Username</MyText>
+        <TextInput
           style={{
             backgroundColor: '#f2f3f5',
             height: 50,
@@ -141,6 +164,8 @@ const Login = ({
             borderRadius: 8,
             paddingLeft: 20,
             marginBottom: 20,
+            borderBottomWidth: 1,
+            borderColor: '#aaa',
           }}
           onChange={onChangeInput}
           onChangeText={onChangeText('username')}
@@ -148,26 +173,32 @@ const Login = ({
           // placeholder="Username"
         />
         <MyText>Password</MyText>
-        <InputTimeout
-          ref={refInput}
+        <TextInput
+          secureTextEntry={true}
           style={{
             backgroundColor: '#f2f3f5',
             height: 50,
             fontSize: 16,
             borderRadius: 8,
             paddingLeft: 20,
-            marginBottom: 20,
+            marginBottom: 30,
+            borderBottomWidth: 1,
+            borderColor: '#aaa',
           }}
           onChange={onChangeInput}
           onChangeText={onChangeText('password')}
           value={state.password}
           // placeholder="Password"
         />
-        <MyButton onClick={onSubmit}>Login</MyButton>
-        <MyText style={{textAlign: 'center', marginTop: 5, marginBottom: 5}}>
+        <MyButton
+          color={state.emptyInput ? 'gray30' : 'primary'}
+          onClick={onSubmit}>
+          Login
+        </MyButton>
+        {/* <MyText style={{textAlign: 'center', marginTop: 5, marginBottom: 5}}>
           Or login with
-        </MyText>
-        <View style={{display: 'flex', flexDirection: 'row'}}>
+        </MyText> */}
+        {/* <View style={{display: 'flex', flexDirection: 'row'}}>
           <MyButton source={icon.google} color="gray10" style={{flex: 1}}>
             Google
           </MyButton>
@@ -178,23 +209,28 @@ const Login = ({
             style={{flex: 1, marginLeft: 20}}>
             Facebook
           </MyButton>
-        </View>
+        </View> */}
 
         <View
           style={{
-            marginTop: 5,
+            marginTop: 30,
             flexDirection: 'row',
             justifyContent: 'center',
           }}>
           <MyText>New user?</MyText>
-          <MyText
-            style={{
-              color: COLORS.primary,
-              marginLeft: 15,
-              fontWeight: 'bold',
+          <TouchableOpacity
+            onPress={() => {
+              navigation.replace('Register');
             }}>
-            Sign Up Now
-          </MyText>
+            <MyText
+              style={{
+                color: COLORS.primary,
+                marginLeft: 15,
+                fontWeight: 'bold',
+              }}>
+              Sign Up Now
+            </MyText>
+          </TouchableOpacity>
         </View>
         {/* <TouchableWithoutFeedback onPress={onSubmit}>
           <View

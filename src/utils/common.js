@@ -205,4 +205,21 @@ export const getAuditInfo = data => {
   };
 };
 
+export const secondToHour = second => {
+  const hour = Math.floor(second / 3600);
+  const minute = Math.floor(second / 60) % 60;
+  return (
+    (hour ? ('00' + hour).slice(-2) + ':' : '') +
+    ('00' + minute).slice(-2) +
+    ':' +
+    ('00' + Math.round(second % 60)).slice(-2)
+  );
+};
+
+export const minuteToHour = second =>
+  ('00' + Math.floor(second / 60)).slice(-2) +
+  'h ' +
+  ('00' + Math.round(second % 60)).slice(-2) +
+  'm';
+
 export {combineUrlParams, parseUrlParams, timeFromNow};

@@ -8,26 +8,22 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {connect} from 'react-redux';
-import {COLORS, dummyData, icons, images, SIZES} from '../../../constants';
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
+import {connect, useDispatch, useSelector} from 'react-redux';
+import {COLORS, dummyData, icons, images, SIZES} from '../../constants';
 import Avatar from '../../components/Avatar';
 import BottomNavigate from '../../components/BottomNavigate';
+import ListCourse from '../../components/ListCourse';
 import MyButton from '../../components/MyButton';
 import MyText from '../../components/MyText';
-import {getImg} from '../../utils/common';
+import {getImg, minuteToHour} from '../../utils/common';
 import {imgDefault} from '../../variable';
+import moment from 'moment';
 
 const height = Dimensions.get('window').height;
-
-const testData = () => {
-  const output = ['Tạo cuộc gọi thoại'];
-  for (let i = 0; i < 50; i++) {
-    output.push(`Linh Vũ Hương (${i})`);
-  }
-  return output;
-};
-const userActive = testData();
 
 const baseWidth = SIZES.width - 40;
 
@@ -40,6 +36,9 @@ const Home = ({
   getListMessage,
 }) => {
   const [state, _setState] = useState({onTop: true});
+  const listCourseHome = useSelector(state => state.course.listCourseHome);
+  const {getListHome} = useDispatch().course;
+
   const setState = data => {
     _setState(pre => ({...pre, ...data}));
   };
@@ -50,7 +49,7 @@ const Home = ({
     navigation.push(name);
   };
   useEffect(() => {
-    connect();
+    getListHome();
   }, []);
 
   const onScroll = event => {
@@ -64,8 +63,8 @@ const Home = ({
     navigation.push('CourseList');
   };
 
-  const selectCourse = () => () => {
-    navigation.push('CourseInfo');
+  const selectCourse = item => () => {
+    navigation.push('CourseInfo', {item});
   };
 
   return (
@@ -80,27 +79,18 @@ const Home = ({
           height: 70,
           padding: 10,
           alignItems: 'center',
-          // ...(state.onTop
-          //   ? {
-          //       borderColor: COLORS.white,
-          //     }
-          //   : {
-          //       shadowColor: '#000',
-          //       shadowOffset: {width: 1, height: 1},
-          //       shadowOpacity: 0.4,
-          //       shadowRadius: 3,
-          //       elevation: 3,
-          //     }),
         }}>
         <View>
-          <Avatar source={{uri: getImg(auth?.avatar)}} size={50}></Avatar>
+          <Avatar
+            source={{uri: getImg(auth?.avatar) || auth?.avatar}}
+            size={50}></Avatar>
         </View>
         <View style={{flex: 1, paddingLeft: 10}}>
           <MyText type="h3" style={{fontWeight: 'bold', color: COLORS.black}}>
-            Hello, Ngô Hiếu
+            Hello, {auth?.full_name}
           </MyText>
           <MyText type="body5" style={{color: COLORS.gray30}}>
-            Thursday, 9th step 2022
+            {moment().format('dddd, DD MMM yyyyy')}
           </MyText>
         </View>
         <TouchableWithoutFeedback
@@ -180,83 +170,10 @@ const Home = ({
                 // height: 100,
                 backgroundColor: '#fff',
               }}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    paddingLeft: 15,
-                    paddingRight: 15,
-                    borderBottomColor: COLORS.gray20,
-                    borderBottomWidth: 1,
-                    paddingBottom: 10,
-                  }}>
-                  {dummyData.courses_list_1?.map((item, index) => (
-                    <TouchableWithoutFeedback
-                      key={index}
-                      onPress={selectCourse()}>
-                      <View
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          paddingLeft: 5,
-                          paddingRight: 5,
-                        }}
-                        onPress={() => {}}>
-                        <Image
-                          source={item.thumbnail}
-                          style={{
-                            width: SIZES.width - 150,
-                            height: SIZES.width - 250,
-                            borderRadius: 15,
-                            // marginLeft: 5,
-                            // marginRight: 5,
-                          }}></Image>
-                        <View
-                          style={{
-                            display: 'flex',
-                            // alignItems: 'center',
-                            flexDirection: 'row',
-                            width: SIZES.width - 170,
-                            marginTop: 10,
-                          }}>
-                          <Image source={icons.play_1} style={{}}></Image>
-                          <View style={{marginLeft: 10}}>
-                            <MyText
-                              type="body4"
-                              style={{
-                                width: SIZES.width - 220,
-                                fontWeight: 'bold',
-                                color: COLORS.black,
-                                lineHeight: 18,
-                              }}>
-                              {item.title}
-                            </MyText>
-                            <View
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexDirection: 'row',
-                              }}>
-                              <Image
-                                source={icons.time}
-                                style={{
-                                  marginRight: 8,
-                                  width: 18,
-                                  height: 18,
-                                }}></Image>
-                              <MyText
-                                type="body5"
-                                style={{color: COLORS.gray30}}>
-                                {item.duration}
-                              </MyText>
-                            </View>
-                          </View>
-                        </View>
-                      </View>
-                    </TouchableWithoutFeedback>
-                  ))}
-                </View>
-              </ScrollView>
+              <ListCourse
+                data={dummyData.courses_list_1}
+                selectCourse={selectCourse}
+              />
             </View>
           </View>
 
@@ -300,7 +217,9 @@ const Home = ({
                     paddingBottom: 10,
                   }}>
                   {dummyData.categories?.map((item, index) => (
-                    <TouchableWithoutFeedback onPress={selectCategory()}>
+                    <TouchableWithoutFeedback
+                      key={index}
+                      onPress={selectCategory()}>
                       <View
                         key={index}
                         style={{
@@ -349,11 +268,11 @@ const Home = ({
             <MyText type="h2" style={{color: COLORS.black, fontWeight: 'bold'}}>
               Popular Courses
             </MyText>
-            <MyButton
+            {/* <MyButton
               styleText={{color: COLORS.white}}
               style={{width: 80, padding: 3, height: 30}}>
               See All
-            </MyButton>
+            </MyButton> */}
           </View>
 
           <View
@@ -376,8 +295,8 @@ const Home = ({
                     borderBottomWidth: 1,
                     paddingBottom: 10,
                   }}>
-                  {dummyData.courses_list_2?.map((item, index) => (
-                    <TouchableWithoutFeedback onPress={selectCourse()}>
+                  {listCourseHome?.map((item, index) => (
+                    <TouchableOpacity key={index} onPress={selectCourse(item)}>
                       <View
                         key={index}
                         style={{
@@ -393,7 +312,10 @@ const Home = ({
                         }}
                         onPress={() => {}}>
                         <Image
-                          source={item.thumbnail}
+                          source={
+                            item.imageUrl ||
+                            require('../../assets/images/thumbnail_1.png')
+                          }
                           style={{
                             width: (baseWidth * 2) / 5,
                             height: (baseWidth * 2) / 5,
@@ -415,7 +337,7 @@ const Home = ({
                               color: COLORS.black,
                               lineHeight: 18,
                             }}>
-                            {item.title}
+                            {item.name}
                           </MyText>
                           <View
                             style={{
@@ -423,7 +345,7 @@ const Home = ({
                               justifyContent: 'space-between',
                               marginTop: 5,
                             }}>
-                            <MyText type="body5">By {item.instructor}</MyText>
+                            <MyText type="body5">By {item.author}</MyText>
                             <View
                               style={{
                                 display: 'flex',
@@ -440,7 +362,7 @@ const Home = ({
                               <MyText
                                 type="body5"
                                 style={{color: COLORS.gray30}}>
-                                {item.duration}
+                                {minuteToHour(item.duration || 0)}
                               </MyText>
                             </View>
                           </View>
@@ -483,14 +405,14 @@ const Home = ({
                           </View>
                         </View>
                       </View>
-                    </TouchableWithoutFeedback>
+                    </TouchableOpacity>
                   ))}
                 </View>
               </ScrollView>
             </View>
           </View>
         </ScrollView>
-        <BottomNavigate current="Home"></BottomNavigate>
+        {/* <BottomNavigate current="Home"></BottomNavigate> */}
       </View>
     </View>
   );

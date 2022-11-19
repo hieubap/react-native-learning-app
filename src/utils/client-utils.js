@@ -1,3 +1,5 @@
+import {_navigator} from '..';
+
 export const UrlServer = () => {
   const domain = global.origin;
   const localhost = true;
@@ -8,8 +10,11 @@ export const UrlServer = () => {
   //   case "http://localhost:3000": // localhost
   //     return localhost ? "http://localhost:8880" : "http://45.13.132.247:8800";
   // }
-  return localhost ? 'http://192.168.1.3:8800' : 'http://45.13.132.247:8800';
+  // return 'http://192.168.1.4:8800'
+  return 'https://75ed-123-16-43-66.ap.ngrok.io';
 };
+
+export const fileURL = UrlServer() + '/files/';
 
 export default {
   auth: '',
@@ -32,7 +37,7 @@ export default {
           : {
               Accept: 'application/json',
               'Content-Type': 'application/json',
-              Authorization: this.auth,
+              Authorization: 'Bearer ' + this.auth,
             },
         body,
       )
@@ -41,6 +46,10 @@ export default {
             .then(val => {
               console.log('response', val);
               if (val.code === 401) {
+                _navigator.reset({
+                  index: 1,
+                  routes: [{name: 'Login'}],
+                });
                 // localStorage.clear();
                 // window.location.href = "/auth/login";
               }
@@ -52,7 +61,11 @@ export default {
         })
         .catch(e => {
           if (e && e.status === 401) {
-            localStorage.clear();
+            _navigator.reset({
+              index: 1,
+              routes: [{name: 'Login'}],
+            });
+            // localStorage.clear();
             // window.location.href = "/auth/login";
           }
           reject(e);
@@ -88,7 +101,7 @@ export default {
         methodType,
         url && url.indexOf('http') === 0 ? url : url,
         {
-          Authorization: this.auth,
+          Authorization: 'Bearer ' + this.auth,
         },
         form,
       )
@@ -96,7 +109,11 @@ export default {
           s.json()
             .then(val => {
               if (val.code === 401) {
-                localStorage.clear();
+                _navigator.reset({
+                  index: 1,
+                  routes: [{name: 'Login'}],
+                });
+                // localStorage.clear();
                 // window.location.href = "/auth/login";
               }
               resolve(val);
@@ -107,7 +124,11 @@ export default {
         })
         .catch(e => {
           if (e && e.status === 401) {
-            localStorage.clear();
+            _navigator.reset({
+              index: 1,
+              routes: [{name: 'Login'}],
+            });
+            // localStorage.clear();
             // window.location.href = "/auth/login";
           }
           reject(e);

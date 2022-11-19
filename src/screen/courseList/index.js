@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
-import {COLORS, dummyData, icons, images, SIZES} from '../../../constants';
+import {COLORS, dummyData, icons, images, SIZES} from '../../constants';
 import Avatar from '../../components/Avatar';
 import BottomNavigate from '../../components/BottomNavigate';
 import InputTimeout from '../../components/InputTimeout';

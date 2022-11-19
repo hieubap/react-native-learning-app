@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {Image, TouchableWithoutFeedback, View, NativeModules} from 'react-native';
-import {COLORS, constants, dummyData, icons, SIZES} from '../../../constants';
+import {COLORS, constants, dummyData, icons, SIZES} from '../../constants';
 import MyText from '../../components/MyText';
 import {withNavigation} from '@react-navigation/compat';
 import MyButton from '../../components/MyButton';
 
 const baseWidth = SIZES.width - 40;
-const {CalendarModule} = NativeModules;
 
 const Categories = ({navigation}) => {
   const [state, _setState] = useState({selectId: -1});
@@ -19,8 +18,6 @@ const Categories = ({navigation}) => {
   const goBack = () => {
     navigation.pop();
   };
-
-  CalendarModule.show("call to native module");
 
   return (
     <View

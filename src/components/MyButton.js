@@ -6,7 +6,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {COLORS, SIZES} from '../../constants';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {COLORS, SIZES} from '../constants';
 
 const MyButton = ({
   children,
@@ -18,10 +19,10 @@ const MyButton = ({
   onClick,
 }) => {
   return (
-    <TouchableWithoutFeedback onPress={onClick && onClick}>
+    <TouchableOpacity onPress={onClick && onClick}>
       <View
         style={{
-          padding: SIZES.padding,
+          padding: SIZES.padding16,
           borderRadius: 35,
           backgroundColor: COLORS[color],
           display: 'flex',
@@ -33,9 +34,17 @@ const MyButton = ({
           <Image source={source} style={{marginRight: 10, ...styleIcon}} />
         )}
 
-        <Text style={{textAlign: 'center', ...styleText}}>{children}</Text>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontWeight: 'bold',
+            color: '#fff',
+            ...styleText,
+          }}>
+          {children}
+        </Text>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 

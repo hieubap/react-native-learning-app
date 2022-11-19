@@ -1,40 +1,39 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Image, TouchableWithoutFeedback, View} from 'react-native';
-import {COLORS, icons, SIZES} from '../../constants';
+import {COLORS, icons, SIZES} from '../constants';
 import MyText from './MyText';
 import {withNavigation} from '@react-navigation/compat';
+import {_navigator} from '..';
+import {Routes} from '../utils/strings';
 
 const routes = [
   {
     id: 1,
-    name: 'Home',
+    name: Routes.Home,
     icon: icons.home,
   },
   {
     id: 2,
-    name: 'Search',
+    name: Routes.Search,
     icon: icons.search,
   },
   {
     id: 3,
-    name: 'Profile',
+    name: Routes.Profile,
     icon: icons.profile,
   },
 ];
 
 const w = SIZES.width - 40;
 
-const BottomNavigate = ({current, navigation}) => {
-  const [state, _setState] = useState({});
-  useEffect(() => {
-    _setState({current});
-  }, [current]);
+const BottomNavigate = ({state, navigation}) => {
+  console.log(navigation, navigation.getState());
 
   return (
     <View
       style={{
-        paddingTop: 10,
+        // paddingTop: 10,
         paddingLeft: 20,
         width: SIZES.width,
         height: 100,
@@ -49,8 +48,9 @@ const BottomNavigate = ({current, navigation}) => {
         }}>
         {routes.map((item, key) => (
           <TouchableWithoutFeedback
+            key={key}
             onPress={() => {
-              navigation.push(item.name);
+              navigation.navigate(item.name);
             }}>
             <View
               key={key}
@@ -61,7 +61,7 @@ const BottomNavigate = ({current, navigation}) => {
                 justifyContent: 'center',
                 width: w / 3,
                 backgroundColor:
-                  item.name === state.current
+                  item.id - 1 === state.index
                     ? COLORS.primary
                     : COLORS.primary3,
               }}>
@@ -82,4 +82,4 @@ const BottomNavigate = ({current, navigation}) => {
 
 BottomNavigate.propTypes = {};
 
-export default withNavigation(BottomNavigate);
+export default BottomNavigate;

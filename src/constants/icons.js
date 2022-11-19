@@ -51,6 +51,8 @@ const star_1 = require("../assets/icons/star_1.png")
 const sun = require("../assets/icons/sun.png")
 const time = require("../assets/icons/time.png")
 const web_design = require("../assets/icons/web_design.png")
+const fullscreen = require("../assets/icons/fullscreen.png")
+const minimize = require("../assets/icons/minimize.png")
 
 export default {
     all,
@@ -104,5 +106,7 @@ export default {
     star_1,
     sun,
     time,
-    web_design
+    web_design,
+    fullscreen,
+    minimize
 }

@@ -64,7 +64,9 @@ const Home = ({
   };
 
   const selectCourse = item => () => {
-    navigation.push('CourseInfo', {item});
+    if (item.id) {
+      navigation.push('CourseInfo', {item});
+    }
   };
 
   return (
@@ -95,7 +97,7 @@ const Home = ({
         </View>
         <TouchableWithoutFeedback
           onPress={() => {
-            navigation.push('Login');
+            // navigation.push('Login');
           }}>
           <View>
             <Image

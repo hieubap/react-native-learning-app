@@ -50,11 +50,11 @@ const Profile = ({connect, auth}) => {
 
   const listSetting = [
     {icon: icons.star, title: '', content: 'Pages'},
-    {
-      icon: icons.new_icon,
-      title: '',
-      content: 'New Course Notification',
-    },
+    // {
+    //   icon: icons.new_icon,
+    //   title: '',
+    //   content: 'New Course Notification',
+    // },
     {
       icon: icons.password,
       title: '',

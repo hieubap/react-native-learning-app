@@ -2,7 +2,7 @@ import accountProvider from '@data-access/account-provider';
 import fileProvider from '@data-access/file-provider';
 import messageProvider from '@data-access/message-provider';
 import roomProvider from '@data-access/room-provider';
-import clientUtils, {UrlServer} from '@utils/client-utils';
+import clientUtils from '@utils/client-utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getImg} from '@utils/common';
 import {createRef} from 'react';
@@ -80,7 +80,7 @@ export default {
       const {userId = 1, deviceInfoId} = state.auth?.auth || {};
 
       function connect() {
-        socket = new SockJS(`${UrlServer()}/ws`); // api/v1
+        socket = new SockJS(`${clientUtils.serverApi}/ws`); // api/v1
         stompClient = Stomp.over(socket);
         stompClient.connect(
           {

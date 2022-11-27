@@ -1,3 +1,4 @@
+import application from './application';
 import navigation from './navigation';
 import socket from './socket';
 import auth from './auth';
@@ -7,11 +8,12 @@ import register from './register';
 import comment from './comment';
 
 export default {
+  application,
   navigation,
   socket,
   auth,
   course,
   comment,
   chapter,
-  register
+  register,
 };

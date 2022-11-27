@@ -17,7 +17,7 @@ import MyText from '../../components/MyText';
 import Chapter from './Chapter';
 import Comment from './Comment';
 import Video from 'react-native-video';
-import {fileURL} from '../../utils/client-utils';
+import clientUtils from '../../utils/client-utils';
 import Orientation from 'react-native-orientation-locker';
 
 const {width, height} = Dimensions.get('screen');
@@ -64,6 +64,8 @@ const CourseInfo = ({navigation, route}) => {
         width: width,
         height: 220,
       };
+
+  console.log(clientUtils.fileURL, 'fileURL???');
 
   return (
     <View
@@ -118,7 +120,7 @@ const CourseInfo = ({navigation, route}) => {
             }}
             // onVideoEnd={(...arr) }
             source={{
-              uri: fileURL + playItem?.fileUrl,
+              uri: clientUtils.fileURL + playItem?.fileUrl,
             }} // Can be a URL or a local file.
             ref={ref => {
               console.log(ref, 'refvideo...');

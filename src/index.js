@@ -1,10 +1,10 @@
 import {
   createNavigationContainerRef,
-  NavigationContainer,
+  NavigationContainer
 } from '@react-navigation/native';
-import React, {createRef} from 'react';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {Provider} from 'react-redux';
+import React, { createRef } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
 import ModalConfirm from './components/ModalConfirm';
 import Navigation from './navigation';
 import store from './redux';

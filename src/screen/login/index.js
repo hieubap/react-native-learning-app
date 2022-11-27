@@ -55,11 +55,7 @@ const Login = ({
           });
       })
       .catch(e => {
-        refModal.current &&
-          refModal.current.show({
-            type: 'error',
-            content: e.message || e?.toString(),
-          });
+        console.log(e, 'error?');
       });
     // navigation.push('Explore');
     // onLogin({username: state.username, password: state.password}).then(() => {

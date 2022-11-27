@@ -2,6 +2,7 @@ import {StyleSheet} from 'react-native';
 
 export const Styles = StyleSheet.create({
   flex1: {flex: 1},
+  flexCenter: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   mlAuto: {marginLeft: 'auto'},
   menuTitle: {
     marginLeft: 10,

@@ -12,6 +12,7 @@ import {_navigator} from '../../..';
 export default {
   state: {
     auth: {},
+    init: false,
   },
   reducers: {
     updateData(state, payload = {}) {
@@ -19,18 +20,6 @@ export default {
     },
   },
   effects: dispatch => ({
-    initApp: () => {
-      AsyncStorage.getItem('auth').then(res => {
-        const auth = JSON.parse(res) || {};
-        console.log(auth, 'console.log(AsyncStorage.getItem());');
-        if (!!auth?.userId) {
-          dispatch.auth.updateData({
-            auth,
-          });
-          clientUtils.auth = auth.token;
-        }
-      });
-    },
     onLogout: () => {
       dispatch.auth.updateData({auth: null});
       AsyncStorage.clear().then(() => {

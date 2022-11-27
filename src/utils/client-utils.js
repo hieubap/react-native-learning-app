@@ -1,25 +1,15 @@
-import {_navigator} from '..';
-
-export const UrlServer = () => {
-  const domain = global.origin;
-  const localhost = true;
-
-  // switch (domain) {
-  //   case "http://45.13.132.247:1234": // server host
-  //     return "http://45.13.132.247:8082";
-  //   case "http://localhost:3000": // localhost
-  //     return localhost ? "http://localhost:8880" : "http://45.13.132.247:8800";
-  // }
-  // return 'http://192.168.1.4:8800'
-  return 'https://75ed-123-16-43-66.ap.ngrok.io';
-};
-
-export const fileURL = UrlServer() + '/files/';
+import {refModal, _navigator} from '..';
+import store from '../redux';
 
 export default {
   auth: '',
   token: '',
-  serverApi: UrlServer(),
+  serverApi: '',
+  fileURL: '/files/',
+  updateURL(domain) {
+    this.serverApi = domain;
+    this.fileURL = domain + '/files/';
+  },
   requestApi(methodType, url, body, ignoreAuth) {
     return new Promise((resolve, reject) => {
       if (!body) body = {};
@@ -52,6 +42,13 @@ export default {
                 });
                 // localStorage.clear();
                 // window.location.href = "/auth/login";
+              } else {
+                console.log('showing..');
+                refModal.current &&
+                  refModal.current.show({
+                    type: 'error',
+                    content: val.message || val?.toString(),
+                  });
               }
               resolve(val);
             })
@@ -60,7 +57,15 @@ export default {
             });
         })
         .catch(e => {
-          if (e && e.status === 401) {
+          if ('TypeError: Network request failed' === e.toString()) {
+            refModal.current &&
+              refModal.current.show({
+                type: 'error',
+                content:
+                  'Không thể kết nối đến server.\n' +
+                  store.getState().application?.notice,
+              });
+          } else if (e && e.status === 401) {
             _navigator.reset({
               index: 1,
               routes: [{name: 'Login'}],
@@ -83,8 +88,8 @@ export default {
         fetchParam.body = body;
       }
 
-      console.log('request', UrlServer() + url, fetchParam);
-      return fetch(UrlServer() + url, fetchParam)
+      console.log('request', this.serverApi + url, fetchParam);
+      return fetch(this.serverApi + url, fetchParam)
         .then(json => {
           if (!json.ok) {
             reject(json);

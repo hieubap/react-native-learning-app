@@ -1,7 +1,9 @@
 import {createNavigationContainerRef} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
-import {connect, useDispatch} from 'react-redux';
+import {ActivityIndicator, View} from 'react-native';
+import {connect, useDispatch, useSelector} from 'react-redux';
+import firebase from '../firebase';
 import Categories from '../screen/categories';
 import Chat from '../screen/chat';
 import CourseInfo from '../screen/courseInfo';
@@ -11,14 +13,28 @@ import Login from '../screen/login';
 import register from '../screen/register';
 import {Routes} from '../utils/strings';
 import MainTab from './mainTab';
+import {Styles} from './styles';
 
 const Stack = createStackNavigator();
 
 const StackNavigation = ({}) => {
-  const initApp = useDispatch().auth.initApp;
+  const init = useSelector(state => state.application.init);
+  const initApp = useDispatch().application.initApp;
   useEffect(() => {
     initApp();
   }, []);
+
+  useEffect(() => {
+    firebase();
+  }, []);
+
+  if (!init)
+    return (
+      <View style={Styles.flexCenter}>
+        <ActivityIndicator size={'large'}></ActivityIndicator>
+      </View>
+    );
+
   return (
     <Stack.Navigator
       // drawerContent={(props) => <CustomDrawerContent {...props} />}

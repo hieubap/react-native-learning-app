@@ -42,7 +42,7 @@ export default {
                 });
                 // localStorage.clear();
                 // window.location.href = "/auth/login";
-              } else {
+              } else if (val.code !== 0) {
                 console.log('showing..');
                 refModal.current &&
                   refModal.current.show({

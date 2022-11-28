@@ -3,4 +3,7 @@ export const Routes = {
   Search: 'Search',
   Profile: 'Profile',
   MainTab: 'MainTab',
+
+  PrepareCall: 'PrepareCall',
+  VideoCall: 'VideoCall',
 };

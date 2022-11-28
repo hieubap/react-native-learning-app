@@ -38,7 +38,8 @@ const StackNavigation = ({}) => {
   return (
     <Stack.Navigator
       // drawerContent={(props) => <CustomDrawerContent {...props} />}
-      initialRouteName="Login"
+      // initialRouteName="Login"
+      // initialRouteName={Routes.PrepareCall}
       headerMode="none">
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={register} />

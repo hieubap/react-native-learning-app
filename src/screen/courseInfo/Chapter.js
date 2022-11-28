@@ -39,7 +39,7 @@ const Chapter = ({route}) => {
     };
   }, []);
   const onRegister = () => {
-    registerCourse({courseId: data.id});
+    registerCourse({courseId: data.id, data});
   };
   const onPress = item => () => {
     if (!isRegister) return;

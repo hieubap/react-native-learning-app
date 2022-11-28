@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "545436821194",
+    "firebase_url": "https://connect-center-24b1e-default-rtdb.firebaseio.com",
+    "project_id": "connect-center-24b1e",
+    "storage_bucket": "connect-center-24b1e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545436821194:android:442463ba16594c3d1ef633",
+        "android_client_info": {
+          "package_name": "com.react_native_learning_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "545436821194-62v7ibske1dijo6n3tt047pp4he65iam.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG1T2zImBq-k1wtZTGBfbGfJAjPKV3k5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "545436821194-62v7ibske1dijo6n3tt047pp4he65iam.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

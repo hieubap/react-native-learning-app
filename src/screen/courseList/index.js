@@ -6,6 +6,7 @@ import {
   ScrollView,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
@@ -18,6 +19,7 @@ import MyButton from '../../components/MyButton';
 import MyText from '../../components/MyText';
 import {getImg} from '../../utils/common';
 import {imgDefault} from '../../variable';
+import {refFilter} from '../..';
 
 const height = Dimensions.get('window').height;
 
@@ -198,9 +200,9 @@ const CourseList = ({
             5,678 Result
           </MyText>
         </View>
-        <TouchableWithoutFeedback
+        <TouchableOpacity
           onPress={() => {
-            navigation.push('Login');
+            refFilter.current && refFilter.current.open();
           }}>
           <View
             style={{
@@ -220,7 +222,7 @@ const CourseList = ({
               }}
             />
           </View>
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
       </View>
 
       <View>

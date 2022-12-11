@@ -119,7 +119,7 @@ export default {
         // toast.error('Hệ thống đang bảo trì. Xin vui lòng chờ ...');
       }
 
-      connect();
+      // connect();
     },
     createRoom: (_, {auth: {auth}}) => {
       roomProvider.post({adminId: auth?.userId}).then(res => {

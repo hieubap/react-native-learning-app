@@ -18,6 +18,7 @@ import {COLORS} from '../../constants';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import authProvider from '../../data-access/auth-provider';
 import {refModal} from '../..';
+import clientUtils from '../../utils/client-utils';
 
 const screenSize = Dimensions.get('window');
 
@@ -28,7 +29,7 @@ const Login = ({
   sendMessage,
   currentRoom,
 }) => {
-  const {auth} = useSelector(state => state.auth);
+  const {auth = 1} = useSelector(state => state.auth);
   const [state, _setState] = useState({
     width: screenSize.width,
     height: screenSize.height,
@@ -83,7 +84,7 @@ const Login = ({
   };
 
   useEffect(() => {
-    if (auth?.userId) {
+    if (auth?.userId && clientUtils.auth) {
       navigation.replace('Explore');
     }
   }, [auth]);

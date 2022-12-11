@@ -1,15 +1,31 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {Image, TouchableWithoutFeedback, View, NativeModules} from 'react-native';
+import {
+  Image,
+  TouchableWithoutFeedback,
+  View,
+  NativeModules,
+} from 'react-native';
 import {COLORS, constants, dummyData, icons, SIZES} from '../../constants';
 import MyText from '../../components/MyText';
 import {withNavigation} from '@react-navigation/compat';
 import MyButton from '../../components/MyButton';
+import {useDispatch, useSelector} from 'react-redux';
+import clientUtils from '../../utils/client-utils';
 
 const baseWidth = SIZES.width - 40;
 
 const Categories = ({navigation}) => {
   const [state, _setState] = useState({selectId: -1});
+  const {
+    category: {getListCategory},
+  } = useDispatch();
+
+  const listCategory = useSelector(state => state.category.listCategory);
+
+  useEffect(() => {
+    getListCategory();
+  }, []);
 
   const onSelect = selectId => () => {
     _setState({selectId});
@@ -62,7 +78,7 @@ const Categories = ({navigation}) => {
       </MyText>
 
       <View style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
-        {constants.categories.map((item, key) => (
+        {listCategory?.map((item, key) => (
           <View
             key={key}
             style={{
@@ -87,7 +103,7 @@ const Categories = ({navigation}) => {
                       : COLORS.additionalColor13,
                 }}>
                 <Image
-                  source={item.icon}
+                  source={{uri: clientUtils.fileURL + item.icon}}
                   style={{resizeMode: 'stretch', width: 40, height: 50}}
                   tintColor={
                     key === state.selectId ? COLORS.white : COLORS.gray50
@@ -99,7 +115,7 @@ const Categories = ({navigation}) => {
                     textAlign: 'center',
                     width: 90,
                   }}>
-                  {item.label}
+                  {item.name}
                 </MyText>
               </View>
             </TouchableWithoutFeedback>

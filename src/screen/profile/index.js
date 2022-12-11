@@ -14,16 +14,17 @@ const height = Dimensions.get('window').height;
 
 const baseWidth = SIZES.width - 40;
 
-const Profile = ({connect, auth}) => {
+const Profile = ({connect, auth, navigation}) => {
   const {
-    auth: {onLogout},
+    auth: {onLogout, detail},
   } = useDispatch();
   const [state, _setState] = useState({onTop: true});
   const setState = data => {
     _setState(pre => ({...pre, ...data}));
   };
   useEffect(() => {
-    connect();
+    // connect();
+    detail();
   }, []);
 
   const onScroll = event => {
@@ -144,7 +145,14 @@ const Profile = ({connect, auth}) => {
             </View>
           </View>
 
-          <View style={styles.wrapSetting}>{listProfile?.map(renderInfo)}</View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.push('EditProfile');
+            }}>
+            <View style={styles.wrapSetting}>
+              {listProfile?.map(renderInfo)}
+            </View>
+          </TouchableOpacity>
 
           <View style={styles.wrapSetting}>
             {listSetting?.map(renderSetting)}

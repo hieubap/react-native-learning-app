@@ -16,7 +16,7 @@ import MyButton from '../../components/MyButton';
 const baseWidth = SIZES.width - 40;
 const {width} = Dimensions.get('screen');
 
-const Chapter = ({route}) => {
+const Chapter = ({route, navigation}) => {
   const data = route.params.data || {};
   const listChapter = useSelector(state => state.chapter.listChapter);
   const playItem = useSelector(state => state.chapter.playItem);
@@ -79,7 +79,13 @@ const Chapter = ({route}) => {
         </View>
 
         <View style={styles.wrapAuthor}>
-          <Image style={styles.profileImage} source={images.profile}></Image>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.push('Instructor', {authorId: data?.createdBy});
+            }}>
+            <Image style={styles.profileImage} source={images.profile}></Image>
+          </TouchableOpacity>
+
           <View>
             <Text style={styles.authorText}>{data.author}</Text>
             {/* <Text>{data.user?.description}</Text> */}

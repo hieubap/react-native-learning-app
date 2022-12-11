@@ -3,12 +3,15 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect} from 'react';
 import {ActivityIndicator, View} from 'react-native';
 import {connect, useDispatch, useSelector} from 'react-redux';
+import { refFilter } from '..';
 import firebase from '../firebase';
 import Categories from '../screen/categories';
 import Chat from '../screen/chat';
 import CourseInfo from '../screen/courseInfo';
 import CourseList from '../screen/courseList';
+import EditProfile from '../screen/editProfile';
 import Explore from '../screen/explore';
+import Instructor from '../screen/instructor';
 import Login from '../screen/login';
 import register from '../screen/register';
 import {Routes} from '../utils/strings';
@@ -38,7 +41,7 @@ const StackNavigation = ({}) => {
   return (
     <Stack.Navigator
       // drawerContent={(props) => <CustomDrawerContent {...props} />}
-      // initialRouteName="Login"
+      // initialRouteName="EditProfile"
       // initialRouteName={Routes.PrepareCall}
       headerMode="none">
       <Stack.Screen name="Login" component={Login} />
@@ -50,6 +53,8 @@ const StackNavigation = ({}) => {
       {/* <Stack.Screen name="Profile" component={Profile} /> */}
       <Stack.Screen name="CourseList" component={CourseList} />
       <Stack.Screen name="CourseInfo" component={CourseInfo} />
+      <Stack.Screen name="Instructor" component={Instructor} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
   );
 };

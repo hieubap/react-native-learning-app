@@ -13,5 +13,6 @@ export const API = {
   course: '/course',
   comment: '/comment',
   chapter: '/chapter',
+  category: '/category',
   register: '/register',
 };

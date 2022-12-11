@@ -60,6 +60,18 @@ const provider = (API = '') => ({
         });
     });
   },
+  patch(body, id) {
+    return new Promise((resolve, reject) => {
+      clientUtils
+        .requestApi('patch', `${API}/${id}`, body)
+        .then(x => {
+          resolve(x);
+        })
+        .catch(e => {
+          reject(e);
+        });
+    });
+  },
   delete(id) {
     return new Promise((resolve, reject) => {
       clientUtils

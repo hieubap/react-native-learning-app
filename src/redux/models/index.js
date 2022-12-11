@@ -6,6 +6,7 @@ import course from './course';
 import chapter from './chapter';
 import register from './register';
 import comment from './comment';
+import category from './category';
 
 export default {
   application,
@@ -15,5 +16,6 @@ export default {
   course,
   comment,
   chapter,
+  category,
   register,
 };

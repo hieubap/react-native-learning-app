@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {refModal, _navigator} from '..';
 import store from '../redux';
 
@@ -6,7 +7,8 @@ export default {
   token: '',
   serverApi: '',
   fileURL: '/files/',
-  updateURL(domain) {
+  updateURL() {
+    const domain = "http://192.168.1.8:8800"
     this.serverApi = domain;
     this.fileURL = domain + '/files/';
   },
@@ -40,7 +42,7 @@ export default {
                   index: 1,
                   routes: [{name: 'Login'}],
                 });
-                // localStorage.clear();
+                AsyncStorage.clear();
                 // window.location.href = "/auth/login";
               } else if (val.code !== 0) {
                 console.log('showing..');
@@ -114,6 +116,7 @@ export default {
           s.json()
             .then(val => {
               if (val.code === 401) {
+                AsyncStorage.clear();
                 _navigator.reset({
                   index: 1,
                   routes: [{name: 'Login'}],
@@ -129,6 +132,7 @@ export default {
         })
         .catch(e => {
           if (e && e.status === 401) {
+            AsyncStorage.clear();
             _navigator.reset({
               index: 1,
               routes: [{name: 'Login'}],

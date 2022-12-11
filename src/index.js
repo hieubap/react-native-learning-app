@@ -10,9 +10,11 @@ import Navigation from './navigation';
 import store from './redux';
 import messaging from '@react-native-firebase/messaging';
 import {Notifications} from 'react-native-notifications';
+import FilterModal from './screen/courseList/FilterModal';
 
 export const _navigator = createNavigationContainerRef();
 export const refModal = createRef();
+export const refFilter = createRef();
 
 export default function App() {
   useEffect(() => {
@@ -95,6 +97,7 @@ export default function App() {
           <Navigation />
 
           <ModalConfirm ref={refModal} />
+          <FilterModal ref={refFilter} />
         </SafeAreaProvider>
       </NavigationContainer>
     </Provider>

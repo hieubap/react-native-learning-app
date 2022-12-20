@@ -44,13 +44,13 @@ const Profile = ({connect, auth, navigation}) => {
     {
       icon: icons.password,
       title: 'Password',
-      content: 'Updated 2 weeks ago',
+      content: '********',
     },
-    {icon: icons.call, title: 'Name', content: auth?.phone},
+    {icon: icons.call, title: 'Phone', content: auth?.phone},
   ];
 
   const listSetting = [
-    {icon: icons.star, title: '', content: 'Pages'},
+    // {icon: icons.star, title: '', content: 'Pages'},
     // {
     //   icon: icons.new_icon,
     //   title: '',
@@ -139,9 +139,12 @@ const Profile = ({connect, auth, navigation}) => {
                 {auth?.full_name}
               </MyText>
               <MyText style={styles.descriptText}>{auth?.description}</MyText>
-              <MyButton style={styles.becomeBtn} styleText={styles.becomeText}>
+              <MyText style={styles.aboutMeText} numberOfLines={4}>
+                {auth?.aboutMe}
+              </MyText>
+              {/* <MyButton style={styles.becomeBtn} styleText={styles.becomeText}>
                 + Become member
-              </MyButton>
+              </MyButton> */}
             </View>
           </View>
 
@@ -187,6 +190,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   descriptText: {color: COLORS.white},
+  aboutMeText: {color: COLORS.white, fontSize: 12, marginTop: 10},
   cardTopStyle: {
     width: baseWidth,
     height: 200,

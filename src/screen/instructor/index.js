@@ -58,7 +58,7 @@ const Instructor = ({connect, auth, navigation, route}) => {
       title: 'Password',
       content: 'Updated 2 weeks ago',
     },
-    {icon: icons.call, title: 'Name', content: auth?.phone},
+    {icon: icons.call, title: 'Phone', content: auth?.phone},
   ];
 
   const listSetting = [
@@ -200,7 +200,9 @@ const Instructor = ({connect, auth, navigation, route}) => {
           </MyText>
           <TouchableOpacity
             onPress={() => {
-              Linking.openURL(authorDetail.twitter);
+              if (authorDetail.twitter) {
+                Linking.openURL(authorDetail.twitter);
+              }
             }}>
             <View
               style={{
@@ -230,7 +232,9 @@ const Instructor = ({connect, auth, navigation, route}) => {
 
           <TouchableOpacity
             onPress={() => {
-              Linking.openURL(authorDetail.linkedIn);
+              if (authorDetail.linkedIn) {
+                Linking.openURL(authorDetail.linkedIn);
+              }
             }}>
             <View
               style={{
@@ -260,7 +264,9 @@ const Instructor = ({connect, auth, navigation, route}) => {
 
           <TouchableOpacity
             onPress={() => {
-              Linking.openURL(authorDetail.facebook);
+              if (authorDetail.facebook) {
+                Linking.openURL(authorDetail.facebook);
+              }
             }}>
             <View
               style={{
@@ -290,7 +296,9 @@ const Instructor = ({connect, auth, navigation, route}) => {
 
           <TouchableOpacity
             onPress={() => {
-              Linking.openURL(authorDetail.github);
+              if (authorDetail.github) {
+                Linking.openURL(authorDetail.github);
+              }
             }}>
             <View
               style={{

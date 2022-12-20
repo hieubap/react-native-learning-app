@@ -16,8 +16,8 @@ import MyButton from '../../components/MyButton';
 const baseWidth = SIZES.width - 40;
 const {width} = Dimensions.get('screen');
 
-const Chapter = ({route, navigation}) => {
-  const data = route.params.data || {};
+const Chapter = ({data = {}, route, navigation}) => {
+  // const data = route.params.data || {};
   const listChapter = useSelector(state => state.chapter.listChapter);
   const playItem = useSelector(state => state.chapter.playItem);
   const isRegister = useSelector(state => state.register.isRegister);

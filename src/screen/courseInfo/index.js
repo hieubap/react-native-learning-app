@@ -167,7 +167,9 @@ const CourseInfo = ({navigation, route}) => {
         </View>
       </View>
 
-      <TopTab.Navigator
+      <Chapter navigation={navigation} data={data} />
+
+      {/* <TopTab.Navigator
         style={{zIndex: 5}}
         // screenOptions={{
         //   swipeEnabled: false,
@@ -181,7 +183,7 @@ const CourseInfo = ({navigation, route}) => {
             initialParams={{data}}
             component={item.component}></TopTab.Screen>
         ))}
-      </TopTab.Navigator>
+      </TopTab.Navigator> */}
     </View>
   );
 };

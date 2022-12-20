@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
+  RefreshControl,
   ScrollView,
   Text,
   TextInput,
@@ -69,6 +70,10 @@ const Home = ({
     }
   };
 
+  const onRefresh = () => {
+    getListHome();
+  };
+
   return (
     <View
       style={{
@@ -92,7 +97,7 @@ const Home = ({
             Hello, {auth?.full_name}
           </MyText>
           <MyText type="body5" style={{color: COLORS.gray30}}>
-            {moment().format('dddd, DD MMM yyyyy')}
+            {moment().format('dddd, DD MMM yyyy')}
           </MyText>
         </View>
         <TouchableWithoutFeedback
@@ -115,7 +120,12 @@ const Home = ({
         <ScrollView
           onScroll={onScroll}
           style={{height: height - 170, marginTop: -5}}
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={false}
+              onRefresh={onRefresh}></RefreshControl>
+          }>
           <View
             style={{
               width: SIZES.width,
@@ -147,7 +157,7 @@ const Home = ({
             <Image
               source={images.start_learning}
               style={{width: SIZES.width - 100, marginTop: 40}}></Image>
-            <MyButton
+            {/* <MyButton
               style={{
                 position: 'absolute',
                 bottom: 40,
@@ -158,10 +168,10 @@ const Home = ({
               }}
               styleText={{fontWeight: 'bold', color: 'black'}}>
               Start learning
-            </MyButton>
+            </MyButton> */}
           </View>
 
-          <View
+          {/* <View
             style={{
               overflow: 'hidden',
               // height: 105,
@@ -177,7 +187,7 @@ const Home = ({
                 selectCourse={selectCourse}
               />
             </View>
-          </View>
+          </View> */}
 
           <View
             style={{

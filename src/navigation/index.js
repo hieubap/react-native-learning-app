@@ -40,17 +40,12 @@ const StackNavigation = ({}) => {
 
   return (
     <Stack.Navigator
-      // drawerContent={(props) => <CustomDrawerContent {...props} />}
-      // initialRouteName="EditProfile"
-      // initialRouteName={Routes.PrepareCall}
       headerMode="none">
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={register} />
       <Stack.Screen name={Routes.MainTab} component={MainTab} />
-      {/* <Stack.Screen name="Search" component={Search} /> */}
       <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen name="Categories" component={Categories} />
-      {/* <Stack.Screen name="Profile" component={Profile} /> */}
       <Stack.Screen name="CourseList" component={CourseList} />
       <Stack.Screen name="CourseInfo" component={CourseInfo} />
       <Stack.Screen name="Instructor" component={Instructor} />

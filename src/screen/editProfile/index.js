@@ -17,9 +17,11 @@ import MyButton from '../../components/MyButton';
 import MyText from '../../components/MyText';
 import {Styles} from '../../navigation/styles';
 import {useRef} from 'react';
+import img from '../../constants/images';
 
 const screenSize = Dimensions.get('window');
 const height = Dimensions.get('window').height;
+const width = Dimensions.get('screen').width;
 
 const baseWidth = SIZES.width - 40;
 
@@ -28,7 +30,7 @@ const EditProfile = ({connect, auth, navigation}) => {
     auth: {updateAccount},
   } = useDispatch();
   const refInput = useRef({});
-  const [state, _setState] = useState({onTop: true});
+  const [state, _setState] = useState({onTop: true, emptyInput: true});
   const setState = data => {
     _setState(pre => ({...pre, ...data}));
   };
@@ -36,7 +38,18 @@ const EditProfile = ({connect, auth, navigation}) => {
 
   const onChangeText = key => inputData => {
     refInput.current[key] = inputData;
-    const emptyInput = !refInput.current.username || !refInput.current.password;
+
+    const emptyInput = [
+      'email',
+      'fullName',
+      'phone',
+      'description',
+      'facebook',
+      'github',
+      'linkedIn',
+      'twitter',
+      'aboutMe',
+    ].every(i => !refInput.current[i]); // !refInput.current.email || !refInput.current.password;
     if (state.emptyInput !== emptyInput) {
       setState({emptyInput});
     }
@@ -50,6 +63,16 @@ const EditProfile = ({connect, auth, navigation}) => {
 
   return (
     <View style={styles.container}>
+      <Image
+        source={img.bg}
+        style={{
+          top: 0,
+          left: 0,
+          width: screenSize.width,
+          height: screenSize.height / 3,
+          position: 'absolute',
+        }}
+      />
       <View style={styles.nameScreenText}>
         <MyText type="h2" style={styles.profileText}>
           Profile
@@ -97,7 +120,6 @@ const EditProfile = ({connect, auth, navigation}) => {
               // height: (screenSize.width * 8) / 10,
               // backgroundColor: 'white',
               borderRadius: 20,
-              paddingHorizontal: 20,
               marginLeft: 'auto',
               marginRight: 'auto',
               // marginTop: 'auto',
@@ -118,8 +140,8 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderColor: '#aaa',
               }}
               onChangeText={onChangeText('email')}
-              value={state.username}
-              // placeholder="Username"
+              value={state.email}
+              placeholder="Enter email"
             />
             <MyText>Full name</MyText>
             <TextInput
@@ -134,8 +156,8 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderColor: '#aaa',
               }}
               onChangeText={onChangeText('fullName')}
-              value={state.password}
-              // placeholder="Password"
+              value={state.fullName}
+              placeholder="Enter full name"
             />
             <MyText>Phone</MyText>
             <TextInput
@@ -150,8 +172,8 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderColor: '#aaa',
               }}
               onChangeText={onChangeText('phone')}
-              value={state.password}
-              // placeholder="Password"
+              value={state.phone}
+              placeholder="Enter phone"
             />
             <MyText>Description</MyText>
             <TextInput
@@ -166,8 +188,8 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderColor: '#aaa',
               }}
               onChangeText={onChangeText('description')}
-              value={state.password}
-              // placeholder="Password"
+              value={state.description}
+              placeholder="Enter desctiption"
             />
             <MyText>Facebook</MyText>
             <TextInput
@@ -182,8 +204,8 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderColor: '#aaa',
               }}
               onChangeText={onChangeText('facebook')}
-              value={state.password}
-              // placeholder="Password"
+              value={state.facebook}
+              placeholder="Enter facebook link"
             />
             <MyText>Github</MyText>
             <TextInput
@@ -198,8 +220,8 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderColor: '#aaa',
               }}
               onChangeText={onChangeText('github')}
-              value={state.password}
-              // placeholder="Password"
+              value={state.github}
+              placeholder="Enter github link"
             />
             <MyText>Linkedin</MyText>
             <TextInput
@@ -214,8 +236,8 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderColor: '#aaa',
               }}
               onChangeText={onChangeText('linkedIn')}
-              value={state.password}
-              // placeholder="Password"
+              value={state.linkedIn}
+              placeholder="Enter linkedIn link"
             />
             <MyText>Twitter</MyText>
             <TextInput
@@ -230,8 +252,25 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderColor: '#aaa',
               }}
               onChangeText={onChangeText('twitter')}
-              value={state.password}
-              // placeholder="Password"
+              value={state.twitter}
+              placeholder="Enter twitter link"
+            />
+
+            <MyText>About me</MyText>
+            <TextInput
+              style={{
+                backgroundColor: '#f2f3f5',
+                height: 50,
+                fontSize: 16,
+                borderRadius: 8,
+                paddingLeft: 20,
+                marginBottom: 30,
+                borderBottomWidth: 1,
+                borderColor: '#aaa',
+              }}
+              onChangeText={onChangeText('aboutMe')}
+              value={state.aboutMe}
+              placeholder="Enter about me"
             />
           </View>
         </ScrollView>
@@ -239,7 +278,7 @@ const EditProfile = ({connect, auth, navigation}) => {
           color={state.emptyInput ? 'gray30' : 'primary'}
           onClick={onSubmit}
           style={{marginVertical: 10, marginHorizontal: 30}}>
-          Login
+          Save
         </MyButton>
       </View>
     </View>

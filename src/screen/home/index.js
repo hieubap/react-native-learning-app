@@ -38,19 +38,19 @@ const Home = ({
 }) => {
   const [state, _setState] = useState({onTop: true});
   const listCourseHome = useSelector(state => state.course.listCourseHome);
+  const listCategory = useSelector(state => state.category.listCategory);
   const {getListHome} = useDispatch().course;
+  const {getListCategory} = useDispatch().category;
 
   const setState = data => {
     _setState(pre => ({...pre, ...data}));
-  };
-  const gotoChat = () => {
-    navigation.push('Chat');
   };
   const goto = name => () => {
     navigation.push(name);
   };
   useEffect(() => {
     getListHome();
+    getListCategory();
   }, []);
 
   const onScroll = event => {
@@ -60,8 +60,8 @@ const Home = ({
     }
   };
 
-  const selectCategory = () => () => {
-    navigation.push('CourseList');
+  const selectCategory = (item, index) => () => {
+    navigation.push('CourseList', {paramRoute: item, index});
   };
 
   const selectCourse = item => () => {
@@ -72,6 +72,7 @@ const Home = ({
 
   const onRefresh = () => {
     getListHome();
+    getListCategory();
   };
 
   return (
@@ -228,10 +229,10 @@ const Home = ({
                     borderBottomWidth: 1,
                     paddingBottom: 10,
                   }}>
-                  {dummyData.categories?.map((item, index) => (
+                  {listCategory?.map((item, index) => (
                     <TouchableWithoutFeedback
                       key={index}
-                      onPress={selectCategory()}>
+                      onPress={selectCategory(item, index)}>
                       <View
                         key={index}
                         style={{
@@ -242,7 +243,7 @@ const Home = ({
                         }}
                         onPress={() => {}}>
                         <Image
-                          source={item.thumbnail}
+                          source={dummyData.categories[index % 6].thumbnail}
                           style={{
                             width: (SIZES.width / 10) * 5,
                             height: (SIZES.width / 10) * 4,
@@ -260,7 +261,7 @@ const Home = ({
                             color: COLORS.white,
                             lineHeight: 18,
                           }}>
-                          {item.title}
+                          {item.name}
                         </MyText>
                       </View>
                     </TouchableWithoutFeedback>
@@ -389,7 +390,7 @@ const Home = ({
                                 fontWeight: 'bold',
                                 color: COLORS.primary,
                               }}>
-                              ${item.price?.toFixed(2)}
+                              {item.price?.formatPrice()} đ
                             </MyText>
                             <View
                               style={{

@@ -311,7 +311,7 @@ const Search = ({
                               fontWeight: 'bold',
                               color: COLORS.primary,
                             }}>
-                            ${item.price?.toFixed(2)}
+                            {item.price?.formatPrice()} đ
                           </MyText>
                           <View
                             style={{

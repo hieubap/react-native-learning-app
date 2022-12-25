@@ -6,7 +6,14 @@ import {
   View,
   NativeModules,
 } from 'react-native';
-import {COLORS, constants, dummyData, icons, SIZES} from '../../constants';
+import {
+  COLORS,
+  constants,
+  dummyData,
+  icons,
+  images,
+  SIZES,
+} from '../../constants';
 import MyText from '../../components/MyText';
 import {withNavigation} from '@react-navigation/compat';
 import MyButton from '../../components/MyButton';
@@ -103,7 +110,11 @@ const Categories = ({navigation}) => {
                       : COLORS.additionalColor13,
                 }}>
                 <Image
-                  source={{uri: clientUtils.fileURL + item.icon}}
+                  source={
+                    item.icon
+                      ? {uri: clientUtils.fileURL + item.icon}
+                      : constants.categories[key % 6].icon
+                  }
                   style={{resizeMode: 'stretch', width: 40, height: 50}}
                   tintColor={
                     key === state.selectId ? COLORS.white : COLORS.gray50

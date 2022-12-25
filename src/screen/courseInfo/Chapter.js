@@ -12,6 +12,9 @@ import {minuteToHour, secondToHour} from '../../utils/common';
 import {useDispatch, useSelector} from 'react-redux';
 import {Styles} from '../../navigation/styles';
 import MyButton from '../../components/MyButton';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import fileProvider from '../../data-access/file-provider';
+import {refModal} from '../..';
 
 const baseWidth = SIZES.width - 40;
 const {width} = Dimensions.get('screen');
@@ -21,6 +24,8 @@ const Chapter = ({data = {}, route, navigation}) => {
   const listChapter = useSelector(state => state.chapter.listChapter);
   const playItem = useSelector(state => state.chapter.playItem);
   const isRegister = useSelector(state => state.register.isRegister);
+  const statusRegister = useSelector(state => state.register.statusRegister);
+
   const {
     register: {registerCourse, getCheckRegister},
     chapter: {getListChapter, updateData},
@@ -39,10 +44,47 @@ const Chapter = ({data = {}, route, navigation}) => {
     };
   }, []);
   const onRegister = () => {
-    registerCourse({courseId: data.id, data});
+    refModal.current &&
+      refModal.current.show(
+        {
+          type: 'ck',
+          content: `Vui lòng chuyển khoản vào số tài khoản\n\nSố tài khoản: ${data?.stk} \n Ngân hàng: ${data?.nganHang}\n Chủ TK: ${data?.chuTaiKhoan}\n\n chọn ảnh xác nhận giao dịch thành công và chờ xác nhận`,
+          okText: 'Chọn ảnh',
+        },
+        () => {
+          ImageCropPicker.openPicker({
+            // width: 500,
+            // height: 500,
+            // cropping: true,
+          }).then(res => {
+            return new Promise((resolve, reject) => {
+              fileProvider
+                .upload({
+                  uri: res.path,
+                  name: 'image.png',
+                  fileName: 'image',
+                  type: 'image/png',
+                })
+                .then(res => {
+                  registerCourse({courseId: data.id, imgUrl: res.path, data});
+                  // dispatch.auth.updateData({
+                  //   auth: {...auth, avatar: prefixFile + res.slice(8)},
+                  // });
+                  // userProvider.update(auth?.userAddress, {
+                  //   ...auth,
+                  //   create_at: undefined,
+                  //   avatar: prefixFile + res.slice(8),
+                  // });
+                  resolve(res);
+                })
+                .catch(reject);
+            });
+          });
+        },
+      );
   };
   const onPress = item => () => {
-    if (!isRegister) return;
+    if (statusRegister === 0) return;
     updateData({playItem: item});
   };
   const renderItem = ({item, index}) => {
@@ -56,7 +98,7 @@ const Chapter = ({data = {}, route, navigation}) => {
         <TouchableOpacity onPress={onPress(item)}>
           <Image
             source={
-              isRegister
+              statusRegister === 2
                 ? require('../../assets/icons/play_1.png')
                 : require('../../assets/icons/lock.png')
             }
@@ -76,6 +118,9 @@ const Chapter = ({data = {}, route, navigation}) => {
         <View style={{flexDirection: 'row', marginBottom: 10}}>
           <Text style={{}}>{data.numberStudent} students</Text>
           <Text style={{marginLeft: 20}}>{minuteToHour(data?.duration)}</Text>
+          <Text style={{marginLeft: 20}}>
+            price: {data.price?.formatPrice()} đ
+          </Text>
         </View>
 
         <View style={styles.wrapAuthor}>
@@ -90,11 +135,16 @@ const Chapter = ({data = {}, route, navigation}) => {
             <Text style={styles.authorText}>{data.author}</Text>
             {/* <Text>{data.user?.description}</Text> */}
           </View>
-          {!isRegister && (
+          {statusRegister === 0 && (
             <View style={Styles.mlAuto}>
               <MyButton style={styles.regisBtn} onClick={onRegister}>
                 Register
               </MyButton>
+            </View>
+          )}
+          {statusRegister === 1 && (
+            <View style={Styles.mlAuto}>
+              <MyButton style={styles.regisBtn}>Waiting</MyButton>
             </View>
           )}
         </View>

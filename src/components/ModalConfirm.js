@@ -5,8 +5,19 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {Animated, Dimensions, Image, Modal, Text, View} from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  Image,
+  Modal,
+  Platform,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ButtonShadow from './ButtonShadow';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 const screen = Dimensions.get('screen');
 
@@ -69,6 +80,13 @@ const ModalConfirm = (props, ref) => {
     if (refOk.current) refOk.current();
   };
 
+  const onCopy = () => {
+    Clipboard.setString('44010000588734');
+    if (Platform.OS === 'android') {
+      ToastAndroid.show('Copied', 1000);
+    }
+  };
+
   return (
     <Modal transparent visible={state.visible}>
       <View
@@ -88,7 +106,7 @@ const ModalConfirm = (props, ref) => {
             elevation: 20,
             transform: [{scale: refScale.current}],
           }}>
-          {/* <TouchableWithoutFeedback
+          <TouchableOpacity
             onPress={() => {
               setState({visible: false});
             }}>
@@ -102,7 +120,7 @@ const ModalConfirm = (props, ref) => {
                 top: 5,
                 //   backgroundColor: 'black',
               }}></Image>
-          </TouchableWithoutFeedback> */}
+          </TouchableOpacity>
 
           <View
             style={{
@@ -142,6 +160,14 @@ const ModalConfirm = (props, ref) => {
                   styleText={{color: 'black'}}
                   onClick={onCancel}>
                   {state.cancelText}
+                </ButtonShadow>
+              )}
+              {state.type === 'ck' && (
+                <ButtonShadow
+                  style={{width: '40%', backgroundColor: '#f5f5f5'}}
+                  styleText={{color: 'black'}}
+                  onClick={onCopy}>
+                  Copy
                 </ButtonShadow>
               )}
               <ButtonShadow

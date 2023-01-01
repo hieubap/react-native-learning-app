@@ -7,8 +7,7 @@ export default {
   token: '',
   serverApi: '',
   fileURL: '/files/',
-  updateURL() {
-    const domain = "http://192.168.1.2:8800"
+  updateURL(domain) {
     this.serverApi = domain;
     this.fileURL = domain + '/files/';
   },

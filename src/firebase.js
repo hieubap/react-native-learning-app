@@ -18,6 +18,7 @@ if (!firebaseApp.apps.length) {
   firebaseApp.initializeApp(firebaseConfig);
 }
 export default function () {
+  // store.dispatch.application.updateData({init: true});
   database()
     .ref('learning_app')
     .child('config')

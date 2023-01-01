@@ -27,7 +27,7 @@ const Chapter = ({data = {}, route, navigation}) => {
   const statusRegister = useSelector(state => state.register.statusRegister);
 
   const {
-    register: {registerCourse, getCheckRegister},
+    register: {registerCourse, uploadRegister, getCheckRegister},
     chapter: {getListChapter, updateData},
   } = useDispatch();
   const [state, _setState] = useState({onTop: true});
@@ -66,7 +66,12 @@ const Chapter = ({data = {}, route, navigation}) => {
                   type: 'image/png',
                 })
                 .then(res => {
-                  registerCourse({courseId: data.id, imgUrl: res.path, data});
+                  registerCourse({
+                    courseId: data.id,
+                    authorId: data.createdBy,
+                    imgUrl: res.data.filePath,
+                    data,
+                  });
                   // dispatch.auth.updateData({
                   //   auth: {...auth, avatar: prefixFile + res.slice(8)},
                   // });
@@ -75,6 +80,42 @@ const Chapter = ({data = {}, route, navigation}) => {
                   //   create_at: undefined,
                   //   avatar: prefixFile + res.slice(8),
                   // });
+                  resolve(res);
+                })
+                .catch(reject);
+            });
+          });
+        },
+      );
+  };
+  const reUpload = () => {
+    refModal.current &&
+      refModal.current.show(
+        {
+          type: 'ck',
+          content: `Vui lòng chuyển khoản vào số tài khoản\n\nSố tài khoản: ${data?.stk} \n Ngân hàng: ${data?.nganHang}\n Chủ TK: ${data?.chuTaiKhoan}\n\n chọn ảnh xác nhận giao dịch thành công và chờ xác nhận`,
+          okText: 'Chọn ảnh',
+        },
+        () => {
+          ImageCropPicker.openPicker({
+            // width: 500,
+            // height: 500,
+            // cropping: true,
+          }).then(res => {
+            return new Promise((resolve, reject) => {
+              fileProvider
+                .upload({
+                  uri: res.path,
+                  name: 'image.png',
+                  fileName: 'image',
+                  type: 'image/png',
+                })
+                .then(res => {
+                  uploadRegister({
+                    courseId: data.id,
+                    authorId: data.createdBy,
+                    imgUrl: res.data.filePath,
+                  });
                   resolve(res);
                 })
                 .catch(reject);
@@ -133,7 +174,9 @@ const Chapter = ({data = {}, route, navigation}) => {
 
           <View>
             <Text style={styles.authorText}>{data.author}</Text>
-            {/* <Text>{data.user?.description}</Text> */}
+            {statusRegister === 1 && (
+              <Text style={styles.waitingText}>Chờ xác nhận</Text>
+            )}
           </View>
           {statusRegister === 0 && (
             <View style={Styles.mlAuto}>
@@ -144,7 +187,9 @@ const Chapter = ({data = {}, route, navigation}) => {
           )}
           {statusRegister === 1 && (
             <View style={Styles.mlAuto}>
-              <MyButton style={styles.regisBtn}>Waiting</MyButton>
+              <MyButton style={styles.uploadBtn} onClick={reUpload}>
+                Upload
+              </MyButton>
             </View>
           )}
         </View>
@@ -161,17 +206,18 @@ const Chapter = ({data = {}, route, navigation}) => {
 
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff'},
-  wrapContainer: {paddingHorizontal: 25, paddingVertical: 10},
+  wrapContainer: {paddingHorizontal: 10, paddingVertical: 10},
   headerText: {fontWeight: 'bold', fontSize: 20, color: '#000'},
   wrapAuthor: {flexDirection: 'row', alignItems: 'center'},
   authorText: {fontWeight: 'bold', fontSize: 18},
   regisBtn: {padding: 8},
+  uploadBtn: {padding: 8, backgroundColor: COLORS.primary3},
   profileImage: {
     width: width * 0.15,
     height: width * 0.15,
     borderRadius: width * 0.1,
     resizeMode: 'stretch',
-    marginRight: 20,
+    marginRight: 5,
   },
   chapterItem: {
     paddingVertical: 10,
@@ -203,6 +249,13 @@ const styles = StyleSheet.create({
   chapterTime: {
     fontSize: 12,
     color: '#aaa',
+  },
+  waitingText: {
+    backgroundColor: COLORS.green2,
+    color: COLORS.white,
+    borderRadius: 15,
+    fontSize: 12,
+    textAlign: 'center',
   },
 });
 

@@ -5,11 +5,13 @@ import store from '../redux';
 export default {
   auth: '',
   token: '',
-  serverApi: '',
-  fileURL: '/files/',
-  updateURL(domain) {
-    this.serverApi = domain;
-    this.fileURL = domain + '/files/';
+  serverApi: 'http://14.225.205.222:8800',
+  fileURL: 'http://14.225.205.222:8800/files/',
+  updateURL() {
+    // const domain = "http://14.225.205.222:8800"
+    // const domain = "http://192.168.1.6:8800";
+    // this.serverApi = domain;
+    // this.fileURL = domain + '/files/';
   },
   requestApi(methodType, url, body, ignoreAuth) {
     return new Promise((resolve, reject) => {

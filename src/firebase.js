@@ -19,16 +19,16 @@ if (!firebaseApp.apps.length) {
 }
 export default function () {
   // store.dispatch.application.updateData({init: true});
-  database()
-    .ref('learning_app')
-    .child('config')
-    .on('value', snapshot => {
-      const data = snapshot.val();
-      clientUtils.updateURL(data.api);
-      const dataUpdate = {init: true};
-      if (data.notice) {
-        dataUpdate.notice = data.notice;
-      }
-      store.dispatch.application.updateData(dataUpdate);
-    });
+  // database()
+  //   .ref('learning_app')
+  //   .child('config')
+  //   .on('value', snapshot => {
+  //     const data = snapshot.val();
+  //     clientUtils.updateURL(data.api);
+  //     const dataUpdate = {init: true};
+  //     if (data.notice) {
+  //       dataUpdate.notice = data.notice;
+  //     }
+  //     store.dispatch.application.updateData(dataUpdate);
+  //   });
 }

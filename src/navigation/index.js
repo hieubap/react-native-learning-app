@@ -27,16 +27,16 @@ const StackNavigation = ({}) => {
     initApp();
   }, []);
 
-  useEffect(() => {
-    firebase();
-  }, []);
+  // useEffect(() => {
+  //   firebase();
+  // }, []);
 
-  if (!init)
-    return (
-      <View style={Styles.flexCenter}>
-        <ActivityIndicator size={'large'}></ActivityIndicator>
-      </View>
-    );
+  // if (!init)
+  //   return (
+  //     <View style={Styles.flexCenter}>
+  //       <ActivityIndicator size={'large'}></ActivityIndicator>
+  //     </View>
+  //   );
 
   return (
     <Stack.Navigator

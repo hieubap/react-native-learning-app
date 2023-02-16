@@ -25,7 +25,9 @@
       android:icon="@drawable/studemy_icon"
       android:roundIcon="@drawable/studemy_icon"
       android:allowBackup="false"
-      android:theme="@style/AppTheme">
+      android:theme="@style/AppTheme"
+      android:usesCleartextTraffic="true"
+      >
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

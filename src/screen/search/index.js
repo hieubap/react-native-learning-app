@@ -74,7 +74,7 @@ const Search = ({
   console.log(listRoom, 'list room');
 
   const onChangeText = text => {
-    searchCourse({name: text});
+    searchCourse({name: text?.toLowerCase()});
   };
 
   const selectCourse = item => () => {

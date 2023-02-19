@@ -3,7 +3,7 @@ import {_navigator} from '../../..';
 import clientUtils from '../../../utils/client-utils';
 export default {
   state: {
-    notice: 'Vui lòng sử dụng app vào 19h - 23h các ngày',
+    notice: 'Vui lòng báo lại với nhà phát triển',
   },
   reducers: {
     updateData(state, payload = {}) {

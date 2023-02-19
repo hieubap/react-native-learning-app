@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {refModal, _navigator} from '..';
 import store from '../redux';
+import {CommonActions} from '@react-navigation/native';
 
 export default {
   auth: '',
@@ -38,14 +39,7 @@ export default {
           s.json()
             .then(val => {
               console.log('response', val);
-              if (val.code === 401) {
-                _navigator.reset({
-                  index: 1,
-                  routes: [{name: 'Login'}],
-                });
-                AsyncStorage.clear();
-                // window.location.href = "/auth/login";
-              } else if (val.code !== 0) {
+              if (val.code !== 0) {
                 console.log('showing..');
                 refModal.current &&
                   refModal.current.show({
@@ -69,10 +63,22 @@ export default {
                   store.getState().application?.notice,
               });
           } else if (e && e.status === 401) {
-            _navigator.reset({
-              index: 1,
-              routes: [{name: 'Login'}],
-            });
+            const routeState = _navigator.getCurrentRoute();
+            if (routeState.name !== 'Login') {
+              _navigator.dispatch(
+                CommonActions.reset({
+                  index: 1,
+                  routes: [{name: 'Login'}],
+                }),
+              );
+              this.auth = null;
+              AsyncStorage.clear();
+            }
+
+            // _navigator.reset({
+            //   index: 1,
+            //   routes: [{name: 'Login'}],
+            // });
             // localStorage.clear();
             // window.location.href = "/auth/login";
           }

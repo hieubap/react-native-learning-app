@@ -4,11 +4,12 @@ import React, {useEffect, useState} from 'react';
 import {Dimensions, Image, ScrollView, StyleSheet, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect, useDispatch, useSelector} from 'react-redux';
-import {_navigator} from '../..';
+import {_navigator, refModal} from '../..';
 import {COLORS, dummyData, icons, images, SIZES} from '../../constants';
 import MyButton from '../../components/MyButton';
 import MyText from '../../components/MyText';
 import {Styles} from '../../navigation/styles';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 const height = Dimensions.get('window').height;
 
@@ -16,7 +17,7 @@ const baseWidth = SIZES.width - 40;
 
 const Profile = ({connect, auth, navigation}) => {
   const {
-    auth: {onLogout, detail},
+    auth: {onLogout, detail, updateAvatar},
   } = useDispatch();
   const [state, _setState] = useState({onTop: true});
   const setState = data => {
@@ -115,6 +116,22 @@ const Profile = ({connect, auth, navigation}) => {
     );
   };
 
+  const onChangeAvatar = () => {
+    ImageCropPicker.openPicker({
+      width: 500,
+      height: 500,
+      cropping: true,
+    }).then(res => {
+      updateAvatar(res).catch(() => {
+        refModal.current &&
+          refModal.current.show({
+            type: 'error',
+            content: 'Có lỗi xảy ra',
+          });
+      });
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.nameScreenText}>
@@ -128,12 +145,16 @@ const Profile = ({connect, auth, navigation}) => {
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}>
           <View style={styles.cardTopStyle}>
-            <View style={styles.wrapLeftStyle}>
-              <Image source={images.profile} style={styles.avatarStyle}></Image>
+            <TouchableOpacity
+              style={styles.wrapLeftStyle}
+              onPress={onChangeAvatar}>
+              <Image
+                source={auth?.avatar ? {uri: auth?.avatar} : images.profile}
+                style={styles.avatarStyle}></Image>
               <View style={styles.changeAvatarStyle}>
                 <Image source={icons.camera} style={styles.image16}></Image>
               </View>
-            </View>
+            </TouchableOpacity>
             <View style={styles.wrapRightStyle}>
               <MyText type="h2" style={styles.fullnameText}>
                 {auth?.full_name}

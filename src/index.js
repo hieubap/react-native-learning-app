@@ -11,17 +11,20 @@ import store from './redux';
 import messaging from '@react-native-firebase/messaging';
 import {Notifications} from 'react-native-notifications';
 import FilterModal from './screen/courseList/FilterModal';
+import useNotification from './hook/useNotification';
 
 export const _navigator = createNavigationContainerRef();
 export const refModal = createRef();
 export const refFilter = createRef();
 
 export default function App() {
+  const {initNotification} = useNotification();
   useEffect(() => {
+    Notifications.registerRemoteNotifications();
+    initNotification();
     checkApplicationPermission();
     notificationListening();
 
-    Notifications.registerRemoteNotifications();
 
     // Notifications.events().registerNotificationReceivedForeground(
     //   (notification, completion) => {

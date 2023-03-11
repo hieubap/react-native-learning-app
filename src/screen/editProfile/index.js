@@ -139,6 +139,7 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderBottomWidth: 1,
                 borderColor: '#aaa',
               }}
+              defaultValue={auth?.email}
               onChangeText={onChangeText('email')}
               value={state.email}
               placeholder="Enter email"
@@ -155,6 +156,7 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderBottomWidth: 1,
                 borderColor: '#aaa',
               }}
+              defaultValue={auth?.fullName}
               onChangeText={onChangeText('fullName')}
               value={state.fullName}
               placeholder="Enter full name"
@@ -171,6 +173,7 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderBottomWidth: 1,
                 borderColor: '#aaa',
               }}
+              defaultValue={auth?.phone}
               onChangeText={onChangeText('phone')}
               value={state.phone}
               placeholder="Enter phone"
@@ -187,6 +190,7 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderBottomWidth: 1,
                 borderColor: '#aaa',
               }}
+              defaultValue={auth?.description}
               onChangeText={onChangeText('description')}
               value={state.description}
               placeholder="Enter desctiption"
@@ -203,6 +207,7 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderBottomWidth: 1,
                 borderColor: '#aaa',
               }}
+              defaultValue={auth?.facebook}
               onChangeText={onChangeText('facebook')}
               value={state.facebook}
               placeholder="Enter facebook link"
@@ -219,6 +224,7 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderBottomWidth: 1,
                 borderColor: '#aaa',
               }}
+              defaultValue={auth?.github}
               onChangeText={onChangeText('github')}
               value={state.github}
               placeholder="Enter github link"
@@ -235,6 +241,7 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderBottomWidth: 1,
                 borderColor: '#aaa',
               }}
+              defaultValue={auth?.linkedIn}
               onChangeText={onChangeText('linkedIn')}
               value={state.linkedIn}
               placeholder="Enter linkedIn link"
@@ -251,6 +258,7 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderBottomWidth: 1,
                 borderColor: '#aaa',
               }}
+              defaultValue={auth?.twitter}
               onChangeText={onChangeText('twitter')}
               value={state.twitter}
               placeholder="Enter twitter link"
@@ -268,6 +276,7 @@ const EditProfile = ({connect, auth, navigation}) => {
                 borderBottomWidth: 1,
                 borderColor: '#aaa',
               }}
+              defaultValue={auth?.aboutMe}
               onChangeText={onChangeText('aboutMe')}
               value={state.aboutMe}
               placeholder="Enter about me"

@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {_navigator} from '../../..';
 import accountProvider from '../../../data-access/account-provider';
+import fileProvider from '../../../data-access/file-provider';
 // import {toast} from 'react-toastify';
 
 /* eslint import/no-anonymous-default-export: [2, {"allowObject": true}] */
@@ -142,6 +143,30 @@ export default {
               resolve(res);
             }
           });
+      });
+    },
+    updateAvatar: ({path}, {auth: {auth}}) => {
+      dispatch.auth.updateData({avatarSelect: path});
+      return new Promise((resolve, reject) => {
+        fileProvider
+          .upload({
+            uri: path,
+            name: 'image.png',
+            fileName: 'image',
+            type: 'image/png',
+          })
+          .then(res => {
+            dispatch.auth.updateAccount({
+              avatar: clientUtils.fileURL + res.data?.filePath,
+            });
+            // userProvider.update(auth?.userAddress, {
+            //   ...auth,
+            //   create_at: undefined,
+            //   avatar: prefixFile + res.slice(8),
+            // });
+            resolve(res);
+          })
+          .catch(reject);
       });
     },
   }),

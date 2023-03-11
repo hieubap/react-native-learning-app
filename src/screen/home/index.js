@@ -23,6 +23,8 @@ import MyText from '../../components/MyText';
 import {getImg, minuteToHour} from '../../utils/common';
 import {imgDefault} from '../../variable';
 import moment from 'moment';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import {refModal} from '../..';
 
 const height = Dimensions.get('window').height;
 
@@ -35,6 +37,7 @@ const Home = ({
   listRoom,
   updateData,
   getListMessage,
+  updateAvatar,
 }) => {
   const [state, _setState] = useState({onTop: true});
   const listCourseHome = useSelector(state => state.course.listCourseHome);
@@ -75,6 +78,22 @@ const Home = ({
     getListCategory();
   };
 
+  const onChangeAvatar = () => {
+    ImageCropPicker.openPicker({
+      width: 500,
+      height: 500,
+      cropping: true,
+    }).then(res => {
+      updateAvatar(res).catch(() => {
+        refModal.current &&
+          refModal.current.show({
+            type: 'error',
+            content: 'Có lỗi xảy ra',
+          });
+      });
+    });
+  };
+
   return (
     <View
       style={{
@@ -88,11 +107,11 @@ const Home = ({
           padding: 10,
           alignItems: 'center',
         }}>
-        <View>
+        <TouchableOpacity onPress={onChangeAvatar}>
           <Avatar
-            source={{uri: getImg(auth?.avatar) || auth?.avatar}}
+            source={auth?.avatar ? {uri: auth?.avatar} : images.profile}
             size={50}></Avatar>
-        </View>
+        </TouchableOpacity>
         <View style={{flex: 1, paddingLeft: 10}}>
           <MyText type="h3" style={{fontWeight: 'bold', color: COLORS.black}}>
             Hello, {auth?.full_name}
@@ -243,7 +262,11 @@ const Home = ({
                         }}
                         onPress={() => {}}>
                         <Image
-                          source={dummyData.categories[index % 6].thumbnail}
+                          source={
+                            item?.imageUrl
+                              ? {uri: item?.imageUrl}
+                              : dummyData.categories[index % 6].thumbnail
+                          }
                           style={{
                             width: (SIZES.width / 10) * 5,
                             height: (SIZES.width / 10) * 4,
@@ -256,10 +279,14 @@ const Home = ({
                           style={{
                             position: 'absolute',
                             bottom: 15,
-                            left: 20,
+                            left: 12,
                             fontWeight: 'bold',
                             color: COLORS.white,
                             lineHeight: 18,
+                            backgroundColor: 'rgba(0,0,0,0.2)',
+                            padding: 3,
+                            paddingHorizontal: 6,
+                            borderRadius: 6,
                           }}>
                           {item.name}
                         </MyText>
@@ -326,13 +353,17 @@ const Home = ({
                         onPress={() => {}}>
                         <Image
                           source={
-                            item.imageUrl ||
-                            require('../../assets/images/thumbnail_1.png')
+                            item.imageUrl
+                              ? {
+                                  uri: item.imageUrl,
+                                }
+                              : require('../../assets/images/thumbnail_1.png')
                           }
                           style={{
                             width: (baseWidth * 2) / 5,
                             height: (baseWidth * 2) / 5,
                             borderRadius: 15,
+                            resizeMode: 'cover',
                             // marginLeft: 5,
                             // marginRight: 5,
                           }}></Image>
@@ -399,13 +430,13 @@ const Home = ({
                                 flexDirection: 'row',
                                 marginLeft: 10,
                               }}>
-                              <Image
+                              {/* <Image
                                 source={icons.star}
                                 style={{
                                   marginRight: 4,
                                   width: 14,
                                   height: 14,
-                                }}></Image>
+                                }}></Image> */}
                               <MyText
                                 type="body5"
                                 style={{
@@ -433,9 +464,10 @@ const Home = ({
 
 export default connect(
   ({socket: {listRoom}, auth: {auth}}) => ({listRoom, auth}),
-  ({socket: {connect, getListMessage, updateData}}) => ({
+  ({socket: {connect, getListMessage, updateData}, auth: {updateAvatar}}) => ({
     connect,
     getListMessage,
     updateData,
+    updateAvatar,
   }),
 )(withNavigation(Home));

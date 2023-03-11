@@ -19,6 +19,7 @@ import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import authProvider from '../../data-access/auth-provider';
 import {refModal} from '../..';
 import clientUtils from '../../utils/client-utils';
+import { Routes } from '../../utils/strings';
 
 const screenSize = Dimensions.get('window');
 
@@ -85,7 +86,7 @@ const Login = ({
 
   useEffect(() => {
     if (auth?.userId && clientUtils.auth) {
-      navigation.replace('Explore');
+      navigation.replace(Routes.MainTab);
     }
   }, [auth]);
   useEffect(() => {

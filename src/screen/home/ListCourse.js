@@ -7,7 +7,7 @@ import {
   Text,
   TextInput,
   View,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import {
   TouchableOpacity,
@@ -20,6 +20,7 @@ import BottomNavigate from '../../components/BottomNavigate';
 import MyButton from '../../components/MyButton';
 import MyText from '../../components/MyText';
 import {getImg, minuteToHour} from '../../utils/common';
+import clientUtils from '../../utils/client-utils';
 
 const baseWidth = SIZES.width - 40;
 
@@ -72,7 +73,11 @@ const ListCourse = ({navigation}) => {
             onPress={() => {}}>
             <Image
               source={
-                item.imageUrl || require('../../assets/images/thumbnail_1.png')
+                item.imageUrl
+                  ? {
+                      uri: clientUtils.fileURL + item.imageUrl,
+                    }
+                  : require('../../assets/images/thumbnail_1.png')
               }
               style={{
                 width: (baseWidth * 2) / 5,

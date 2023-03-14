@@ -65,7 +65,7 @@ const CourseInfo = ({navigation, route}) => {
         height: 220,
       };
 
-  console.log(clientUtils.fileURL, 'fileURL???');
+  console.log(data, 'fileURL???');
 
   return (
     <View

@@ -20,6 +20,7 @@ import MyText from '../../components/MyText';
 import {getImg, minuteToHour} from '../../utils/common';
 import {imgDefault} from '../../variable';
 import {refFilter} from '../..';
+import clientUtils from '../../utils/client-utils';
 
 const height = Dimensions.get('window').height;
 
@@ -210,7 +211,13 @@ const CourseList = ({navigation, route}) => {
                     }}
                     onPress={() => {}}>
                     <Image
-                      source={dummyData.courses_list_1[0].thumbnail}
+                      source={
+                        item.imageUrl
+                          ? {
+                              uri: clientUtils.fileURL + item.imageUrl,
+                            }
+                          : require('../../assets/images/thumbnail_1.png')
+                      }
                       style={{
                         width: (baseWidth * 2) / 5,
                         height: (baseWidth * 2) / 5,

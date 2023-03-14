@@ -15,4 +15,5 @@ export const API = {
   chapter: '/chapter',
   category: '/category',
   register: '/register',
+  banner: '/banner',
 };

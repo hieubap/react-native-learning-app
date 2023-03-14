@@ -1,5 +1,5 @@
 import {withNavigation} from '@react-navigation/compat';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -25,6 +25,8 @@ import {imgDefault} from '../../variable';
 import moment from 'moment';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import {refModal} from '../..';
+import bannerProvider from '../../data-access/banner-provider';
+import clientUtils from '../../utils/client-utils';
 
 const height = Dimensions.get('window').height;
 
@@ -39,11 +41,12 @@ const Home = ({
   getListMessage,
   updateAvatar,
 }) => {
-  const [state, _setState] = useState({onTop: true});
+  const [state, _setState] = useState({onTop: true, cur: 0});
   const listCourseHome = useSelector(state => state.course.listCourseHome);
   const listCategory = useSelector(state => state.category.listCategory);
   const {getListHome} = useDispatch().course;
   const {getListCategory} = useDispatch().category;
+  const refInteval = useRef({inteval: null, cur: 0});
 
   const setState = data => {
     _setState(pre => ({...pre, ...data}));
@@ -54,6 +57,21 @@ const Home = ({
   useEffect(() => {
     getListHome();
     getListCategory();
+    bannerProvider.search({}).then(res => {
+      setState({
+        listBanner: res.data,
+      });
+      refInteval.current.time = setInterval(() => {
+        setState({ren: {}});
+        refInteval.current.cur =
+          refInteval.current.cur + 1 >= res?.data.length
+            ? 0
+            : refInteval.current.cur + 1;
+      }, 5000);
+    });
+    return () => {
+      clearInterval(refInteval.current.time);
+    };
   }, []);
 
   const onScroll = event => {
@@ -154,7 +172,15 @@ const Home = ({
               position: 'relative',
             }}>
             <Image
-              source={images.featured_bg_image}
+              source={
+                state.listBanner
+                  ? {
+                      uri:
+                        clientUtils.fileURL +
+                        state.listBanner[refInteval.current.cur].imageUrl,
+                    }
+                  : images.featured_bg_image
+              }
               style={{
                 top: 20,
                 left: 20,
@@ -163,20 +189,32 @@ const Home = ({
                 height: SIZES.width - 40,
                 borderRadius: 20,
               }}></Image>
-            <MyText type="h3" style={{color: COLORS.white}}>
+            {/* <MyText type="h3" style={{color: COLORS.white}}>
               HOW TO
-            </MyText>
-            <MyText type="h3" style={{fontWeight: 'bold', color: COLORS.white}}>
-              Make your brand more visible with our checklist
-            </MyText>
-            <MyText
-              type="body5"
-              style={{marginTop: 10, fontWeight: '100', color: COLORS.white}}>
-              by Scott Harris
-            </MyText>
-            <Image
+            </MyText> */}
+            <View
+              style={{
+                backgroundColor: 'rgba(0,0,0,0.6)',
+                padding: 15,
+                borderRadius: 10,
+              }}>
+              <MyText
+                type="h3"
+                style={{
+                  fontWeight: 'bold',
+                  color: COLORS.white,
+                }}>
+                {state.listBanner?.[refInteval.current.cur]?.title}
+              </MyText>
+              <MyText
+                type="body5"
+                style={{marginTop: 10, fontWeight: '100', color: COLORS.white}}>
+                {state.listBanner?.[refInteval.current.cur]?.content}
+              </MyText>
+            </View>
+            {/* <Image
               source={images.start_learning}
-              style={{width: SIZES.width - 100, marginTop: 40}}></Image>
+              style={{width: SIZES.width - 100, marginTop: 40}}></Image> */}
             {/* <MyButton
               style={{
                 position: 'absolute',
@@ -264,7 +302,7 @@ const Home = ({
                         <Image
                           source={
                             item?.imageUrl
-                              ? {uri: item?.imageUrl}
+                              ? {uri: clientUtils.fileURL + item?.imageUrl}
                               : dummyData.categories[index % 6].thumbnail
                           }
                           style={{
@@ -355,7 +393,7 @@ const Home = ({
                           source={
                             item.imageUrl
                               ? {
-                                  uri: item.imageUrl,
+                                  uri: clientUtils.fileURL + item.imageUrl,
                                 }
                               : require('../../assets/images/thumbnail_1.png')
                           }
